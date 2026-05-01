@@ -535,8 +535,10 @@
             try {
                 await signInWithPopup(auth, googleProvider);
             } catch(e) {
+                console.error("Google sign-in error:", e);
                 if (e.code !== 'auth/popup-closed-by-user') {
-                    showAuthError("Google sign-in failed. Please try again.");
+                    // Show exact error code so we can diagnose
+                    showAuthError(`Error [${e.code}]: ${e.message}`);
                 }
             }
         };
