@@ -397,7 +397,7 @@
     <!-- ═══════════════════════════════════════════════════════ -->
     <script type="module">
         import { initializeApp }           from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, serverTimestamp }
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, serverTimestamp, setDoc }
                                            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword,
                   GoogleAuthProvider, signInWithPopup, signOut }
@@ -424,7 +424,7 @@
         let unsubscribers = [];
 
         // ── Auth State Listener ───────────────────────────────
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             document.getElementById('loading-overlay').style.opacity = '0';
             setTimeout(() => document.getElementById('loading-overlay').style.display = 'none', 300);
 
@@ -438,6 +438,18 @@
                 const initials = (user.displayName || email).charAt(0).toUpperCase();
                 document.getElementById('user-email').textContent     = email;
                 document.getElementById('user-avatar').textContent    = initials;
+
+                // Save/update user profile in Firestore so admin dashboard can see them
+                try {
+                    await setDoc(doc(db, "users", user.uid), {
+                        email:       user.email || '',
+                        displayName: user.displayName || '',
+                        photoURL:    user.photoURL || '',
+                        lastLogin:   new Date().toISOString()
+                    }, { merge: true });
+                } catch(e) {
+                    console.warn("Profile save skipped:", e.message);
+                }
 
                 loadUserData(user.uid);
             } else {
