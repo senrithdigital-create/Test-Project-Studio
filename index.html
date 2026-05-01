@@ -4,23 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Studio Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' }
     </script>
     <style>
+        * { font-family: 'DM Sans', sans-serif; }
+        code, .mono { font-family: 'DM Mono', monospace; }
+
         .section { display: none; }
         .section.active { display: block; }
         table { table-layout: fixed; width: 100%; }
         td { word-wrap: break-word; white-space: normal; }
-        
-        /* Mobile-first button and input fixes */
-        .input-group { 
-            display: flex; 
+
+        .input-group {
+            display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem; 
-            width: 100%; 
-            align-items: center; 
+            gap: 0.5rem;
+            width: 100%;
+            align-items: center;
         }
         .input-group input { flex: 1 1 200px; }
         .input-group button { flex: 0 1 auto; min-width: 80px; }
@@ -28,185 +31,598 @@
         @media (max-width: 640px) {
             .input-group button { width: 100%; }
         }
+
+        /* Auth Screen */
+        #auth-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+            padding: 1rem;
+        }
+
+        .auth-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+        }
+
+        .auth-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .auth-subtitle {
+            color: rgba(255,255,255,0.4);
+            text-align: center;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+        }
+
+        .auth-input {
+            width: 100%;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 0.875rem 1rem;
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+            margin-bottom: 0.75rem;
+            box-sizing: border-box;
+        }
+        .auth-input::placeholder { color: rgba(255,255,255,0.3); }
+        .auth-input:focus {
+            border-color: #60a5fa;
+            background: rgba(96,165,250,0.08);
+        }
+
+        .auth-btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: white;
+            font-weight: 600;
+            padding: 0.875rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: opacity 0.2s, transform 0.1s;
+            margin-bottom: 0.5rem;
+        }
+        .auth-btn-primary:hover { opacity: 0.9; }
+        .auth-btn-primary:active { transform: scale(0.98); }
+
+        .auth-btn-secondary {
+            width: 100%;
+            background: rgba(255,255,255,0.07);
+            color: rgba(255,255,255,0.8);
+            font-weight: 500;
+            padding: 0.875rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.12);
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s, transform 0.1s;
+            margin-bottom: 0.5rem;
+        }
+        .auth-btn-secondary:hover { background: rgba(255,255,255,0.12); }
+        .auth-btn-secondary:active { transform: scale(0.98); }
+
+        .auth-btn-google {
+            width: 100%;
+            background: white;
+            color: #374151;
+            font-weight: 600;
+            padding: 0.875rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: background 0.2s, transform 0.1s;
+            margin-bottom: 0.5rem;
+        }
+        .auth-btn-google:hover { background: #f9fafb; }
+        .auth-btn-google:active { transform: scale(0.98); }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            color: rgba(255,255,255,0.25);
+            font-size: 0.8rem;
+        }
+        .auth-divider::before, .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .auth-toggle {
+            text-align: center;
+            margin-top: 1.25rem;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.4);
+        }
+        .auth-toggle button {
+            color: #60a5fa;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .auth-error {
+            background: rgba(239,68,68,0.15);
+            border: 1px solid rgba(239,68,68,0.3);
+            color: #fca5a5;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            display: none;
+        }
+
+        /* User bar */
+        #user-bar {
+            background: linear-gradient(90deg, #1e3a5f, #1e293b);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        /* Loading overlay */
+        #loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.3s;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(96,165,250,0.2);
+            border-top-color: #60a5fa;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-200">
 
-    <div class="max-w-6xl mx-auto p-4">
-        <header class="flex justify-between items-center py-6">
-            <h1 class="text-2xl font-extrabold text-blue-700 dark:text-blue-400">Project Studio</h1>
-            <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 shadow-sm active:scale-95 transition-transform">
-                <span id="dark-icon">🌙</span>
-            </button>
-        </header>
-
-        <nav class="flex bg-gray-200 dark:bg-gray-800 p-1 rounded-xl mb-6 shadow-inner">
-            <button onclick="showSection('add')" class="nav-btn flex-1 py-2 px-1 rounded-lg font-medium text-xs sm:text-sm transition-all bg-white dark:bg-gray-700 shadow-sm text-blue-600 dark:text-blue-400" id="btn-add">Add Note</button>
-            <button onclick="showSection('table')" class="nav-btn flex-1 py-2 px-1 rounded-lg font-medium text-xs sm:text-sm text-gray-600 dark:text-gray-400 transition-all" id="btn-table">Reports</button>
-            <button onclick="showSection('config')" class="nav-btn flex-1 py-2 px-1 rounded-lg font-medium text-xs sm:text-sm text-gray-600 dark:text-gray-400 transition-all" id="btn-config">Manage</button>
-        </nav>
-
-        <main id="add-section" class="section active space-y-4">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div>
-                        <label class="block text-xs font-bold uppercase mb-1 opacity-60">Project</label>
-                        <select id="noteProj" onchange="syncBranches('note')" class="w-full border p-3 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 outline-none"></select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase mb-1 opacity-60">Branch</label>
-                        <select id="noteBranch" onchange="syncSubBranches('note')" class="w-full border p-3 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 outline-none"></select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase mb-1 opacity-60">Sub-Branch</label>
-                        <select id="noteSubBranch" class="w-full border p-3 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 outline-none"></select>
-                    </div>
-                </div>
-                <textarea id="noteInput" rows="5" class="w-full border p-4 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 outline-none mb-4" placeholder="Write your note here..."></textarea>
-                <button onclick="saveNote()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all active:scale-[0.98]">Save Note</button>
-            </div>
-        </main>
-
-        <section id="table-section" class="section space-y-4">
-            <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border dark:border-gray-700">
-                <div class="grid grid-cols-3 gap-2 mb-4">
-                    <select id="filterProj" onchange="syncBranches('filter'); renderTable();" class="text-xs border p-2 rounded-lg dark:bg-gray-700 outline-none"></select>
-                    <select id="filterBranch" onchange="syncSubBranches('filter'); renderTable();" class="text-xs border p-2 rounded-lg dark:bg-gray-700 outline-none"></select>
-                    <select id="filterSubBranch" onchange="renderTable()" class="text-xs border p-2 rounded-lg dark:bg-gray-700 outline-none"></select>
-                </div>
-                <button onclick="exportToHTML()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg transition-all">📥 Export for AI Analysis</button>
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border dark:border-gray-700 overflow-x-auto">
-                <table class="w-full text-xs sm:text-sm">
-                    <thead>
-                        <tr class="bg-gray-50 dark:bg-gray-700 text-left opacity-70">
-                            <th class="p-4 w-1/4">Context</th>
-                            <th class="p-4 w-2/4">Note</th>
-                            <th class="p-4 w-1/4">Last Update</th>
-                        </tr>
-                    </thead>
-                    <tbody id="notesTableBody" class="divide-y dark:divide-gray-700"></tbody>
-                </table>
-            </div>
-        </section>
-
-        <section id="config-section" class="section space-y-6">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border dark:border-gray-700">
-                <h2 class="font-bold mb-4 text-blue-600">Structure Hierarchy</h2>
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-xs font-bold mb-1 opacity-50 uppercase">1. Manage Projects</label>
-                        <div class="input-group mb-2">
-                            <input id="newProj" type="text" placeholder="Project Name" class="border p-2 rounded-lg dark:bg-gray-700 outline-none">
-                            <button onclick="addItem('projects')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold">Add</button>
-                        </div>
-                        <div id="projList" class="grid gap-2"></div>
-                    </div>
-                    <div class="border-t pt-4 dark:border-gray-700">
-                        <label class="block text-xs font-bold mb-1 opacity-50 uppercase">2. Manage Branches</label>
-                        <select id="parentProj" onchange="renderBranchListOnly()" class="w-full border p-2 mb-2 rounded-lg dark:bg-gray-700"></select>
-                        <div class="input-group mb-2">
-                            <input id="newBranch" type="text" placeholder="Branch Name" class="border p-2 rounded-lg dark:bg-gray-700 outline-none">
-                            <button onclick="addItem('branches')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold">Add</button>
-                        </div>
-                        <div id="branchList" class="grid gap-2"></div>
-                    </div>
-                    <div class="border-t pt-4 dark:border-gray-700">
-                        <label class="block text-xs font-bold mb-1 opacity-50 uppercase">3. Manage Sub-Branches</label>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
-                            <select id="parentBranchProj" onchange="updateBranchDrop('parentBranch'); renderSubListOnly();" class="border p-2 rounded-lg dark:bg-gray-700"></select>
-                            <select id="parentBranch" onchange="renderSubListOnly()" class="border p-2 rounded-lg dark:bg-gray-700"></select>
-                        </div>
-                        <div class="input-group mb-2">
-                            <input id="newSub" type="text" placeholder="Sub-Branch Name" class="border p-2 rounded-lg dark:bg-gray-700 outline-none">
-                            <button onclick="addItem('subs')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold">Add</button>
-                        </div>
-                        <div class="flex items-center mb-2 text-xs font-bold text-blue-500">
-                            <input type="checkbox" id="applyAll" class="mr-2 h-4 w-4"> APPLY TO ALL BRANCHES (Global Sync)
-                        </div>
-                        <div id="subList" class="grid gap-2"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="text-center">
+            <div class="spinner mx-auto mb-4"></div>
+            <p style="color:rgba(255,255,255,0.4); font-size:0.85rem;">Loading Project Studio...</p>
+        </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  AUTH SCREEN                                           -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <div id="auth-screen" style="display:none;">
+        <div class="auth-card">
+            <!-- Logo -->
+            <div style="text-align:center; margin-bottom:0.5rem;">
+                <div style="display:inline-flex; background:linear-gradient(135deg,#3b82f6,#6366f1); border-radius:14px; padding:10px 14px; margin-bottom:0.75rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="auth-title">Project Studio</div>
+            <div class="auth-subtitle" id="auth-subtitle">Sign in to your workspace</div>
 
+            <!-- Error message -->
+            <div id="auth-error" class="auth-error"></div>
+
+            <!-- Email / Password Fields -->
+            <input id="login-email" type="email" placeholder="Email address" class="auth-input"/>
+            <input id="login-pass" type="password" placeholder="Password" class="auth-input"/>
+
+            <!-- Primary action buttons -->
+            <button id="btn-login" onclick="loginEmail()" class="auth-btn-primary">Sign In</button>
+            <button id="btn-register" onclick="registerEmail()" class="auth-btn-secondary" style="display:none;">Create Account</button>
+
+            <div class="auth-divider">or</div>
+
+            <!-- Google Sign In -->
+            <button onclick="loginGoogle()" class="auth-btn-google">
+                <svg width="18" height="18" viewBox="0 0 18 18">
+                    <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+                    <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+                    <path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"/>
+                    <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z"/>
+                </svg>
+                Continue with Google
+            </button>
+
+            <!-- Toggle login / register -->
+            <div class="auth-toggle" id="auth-toggle-login">
+                Don't have an account?
+                <button onclick="showRegisterMode()">Create one</button>
+            </div>
+            <div class="auth-toggle" id="auth-toggle-register" style="display:none;">
+                Already have an account?
+                <button onclick="showLoginMode()">Sign in</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  MAIN APP                                              -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <div id="app-screen" style="display:none;">
+
+        <!-- User Bar -->
+        <div id="user-bar" class="flex justify-between items-center px-4 py-2.5">
+            <div class="flex items-center gap-2">
+                <div id="user-avatar" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#6366f1);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.8rem;flex-shrink:0;"></div>
+                <span id="user-email" class="text-xs text-blue-300 font-medium truncate max-w-[200px]"></span>
+            </div>
+            <button onclick="logout()" class="text-xs text-red-400 hover:text-red-300 font-semibold flex items-center gap-1 transition-colors">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Sign Out
+            </button>
+        </div>
+
+        <!-- App Content -->
+        <div class="max-w-6xl mx-auto p-4">
+            <header class="flex justify-between items-center py-5">
+                <h1 class="text-2xl font-extrabold text-blue-700 dark:text-blue-400">Project Studio</h1>
+                <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 shadow-sm active:scale-95 transition-transform">
+                    <span id="dark-icon">🌙</span>
+                </button>
+            </header>
+
+            <nav class="flex bg-gray-200 dark:bg-gray-800 p-1 rounded-xl mb-6 shadow-inner">
+                <button onclick="showSection('add')" class="nav-btn flex-1 py-2 px-1 rounded-lg font-medium text-xs sm:text-sm transition-all bg-white dark:bg-gray-700 shadow-sm text-blue-600 dark:text-blue-400" id="btn-add">Add Note</button>
+                <button onclick="showSection('table')" class="nav-btn flex-1 py-2 px-1 rounded-lg font-medium text-xs sm:text-sm text-gray-600 dark:text-gray-400 transition-all" id="btn-table">Reports</button>
+                <button onclick="showSection('config')" class="nav-btn flex-1 py-2 px-1 rounded-lg font-medium text-xs sm:text-sm text-gray-600 dark:text-gray-400 transition-all" id="btn-config">Manage</button>
+            </nav>
+
+            <main id="add-section" class="section active space-y-4">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase mb-1 opacity-60">Project</label>
+                            <select id="noteProj" onchange="syncBranches('note')" class="w-full border p-3 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 outline-none"></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase mb-1 opacity-60">Branch</label>
+                            <select id="noteBranch" onchange="syncSubBranches('note')" class="w-full border p-3 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 outline-none"></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase mb-1 opacity-60">Sub-Branch</label>
+                            <select id="noteSubBranch" class="w-full border p-3 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 outline-none"></select>
+                        </div>
+                    </div>
+                    <textarea id="noteInput" rows="5" class="w-full border p-4 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 outline-none mb-4" placeholder="Write your note here..."></textarea>
+                    <button onclick="saveNote()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all active:scale-[0.98]">Save Note</button>
+                </div>
+            </main>
+
+            <section id="table-section" class="section space-y-4">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border dark:border-gray-700">
+                    <div class="grid grid-cols-3 gap-2 mb-4">
+                        <select id="filterProj" onchange="syncBranches('filter'); renderTable();" class="text-xs border p-2 rounded-lg dark:bg-gray-700 outline-none"></select>
+                        <select id="filterBranch" onchange="syncSubBranches('filter'); renderTable();" class="text-xs border p-2 rounded-lg dark:bg-gray-700 outline-none"></select>
+                        <select id="filterSubBranch" onchange="renderTable()" class="text-xs border p-2 rounded-lg dark:bg-gray-700 outline-none"></select>
+                    </div>
+                    <button onclick="exportToHTML()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg transition-all">📥 Export for AI Analysis</button>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border dark:border-gray-700 overflow-x-auto">
+                    <table class="w-full text-xs sm:text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 dark:bg-gray-700 text-left opacity-70">
+                                <th class="p-4 w-1/4">Context</th>
+                                <th class="p-4 w-2/4">Note</th>
+                                <th class="p-4 w-1/4">Last Update</th>
+                            </tr>
+                        </thead>
+                        <tbody id="notesTableBody" class="divide-y dark:divide-gray-700"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="config-section" class="section space-y-6">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border dark:border-gray-700">
+                    <h2 class="font-bold mb-4 text-blue-600">Structure Hierarchy</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold mb-1 opacity-50 uppercase">1. Manage Projects</label>
+                            <div class="input-group mb-2">
+                                <input id="newProj" type="text" placeholder="Project Name" class="border p-2 rounded-lg dark:bg-gray-700 outline-none">
+                                <button onclick="addItem('projects')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold">Add</button>
+                            </div>
+                            <div id="projList" class="grid gap-2"></div>
+                        </div>
+                        <div class="border-t pt-4 dark:border-gray-700">
+                            <label class="block text-xs font-bold mb-1 opacity-50 uppercase">2. Manage Branches</label>
+                            <select id="parentProj" onchange="renderBranchListOnly()" class="w-full border p-2 mb-2 rounded-lg dark:bg-gray-700"></select>
+                            <div class="input-group mb-2">
+                                <input id="newBranch" type="text" placeholder="Branch Name" class="border p-2 rounded-lg dark:bg-gray-700 outline-none">
+                                <button onclick="addItem('branches')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold">Add</button>
+                            </div>
+                            <div id="branchList" class="grid gap-2"></div>
+                        </div>
+                        <div class="border-t pt-4 dark:border-gray-700">
+                            <label class="block text-xs font-bold mb-1 opacity-50 uppercase">3. Manage Sub-Branches</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                                <select id="parentBranchProj" onchange="updateBranchDrop('parentBranch'); renderSubListOnly();" class="border p-2 rounded-lg dark:bg-gray-700"></select>
+                                <select id="parentBranch" onchange="renderSubListOnly()" class="border p-2 rounded-lg dark:bg-gray-700"></select>
+                            </div>
+                            <div class="input-group mb-2">
+                                <input id="newSub" type="text" placeholder="Sub-Branch Name" class="border p-2 rounded-lg dark:bg-gray-700 outline-none">
+                                <button onclick="addItem('subs')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold">Add</button>
+                            </div>
+                            <div class="flex items-center mb-2 text-xs font-bold text-blue-500">
+                                <input type="checkbox" id="applyAll" class="mr-2 h-4 w-4"> APPLY TO ALL BRANCHES (Global Sync)
+                            </div>
+                            <div id="subList" class="grid gap-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  FIREBASE + APP LOGIC                                  -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <script type="module">
+        import { initializeApp }           from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, serverTimestamp }
+                                           from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+                  GoogleAuthProvider, signInWithPopup, signOut }
+                                           from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // ── Firebase Config (new project) ─────────────────────
         const firebaseConfig = {
-            apiKey: "AIzaSyA7cPiyA9ms0fz3waIsGL8076c2AyJiJV0",
-            authDomain: "project-notes-fafdc.firebaseapp.com",
-            projectId: "project-notes-fafdc",
-            storageBucket: "project-notes-fafdc.firebasestorage.app",
-            messagingSenderId: "1098284034250",
-            appId: "1:1098284034250:web:ec39919d935ed5e47e2c33"
+            apiKey:            "AIzaSyCUIF8M3NkSF4DL7tYoIhQI6bfDwBNDPgU",
+            authDomain:        "my-projects-d743d.firebaseapp.com",
+            projectId:         "my-projects-d743d",
+            storageBucket:     "my-projects-d743d.firebasestorage.app",
+            messagingSenderId: "743804413714",
+            appId:             "1:743804413714:web:d4bc97ca8d5f4fba6fb5cb"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const app            = initializeApp(firebaseConfig);
+        const db             = getFirestore(app);
+        const auth           = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
 
-        let allProjs = [], allBranches = [], allSubs = [], allNotes = [];
+        // ── State ─────────────────────────────────────────────
+        let currentUser  = null;
+        let allProjs     = [], allBranches = [], allSubs = [], allNotes = [];
+        let unsubscribers = [];
 
-        onSnapshot(collection(db, "projects"), (s) => { allProjs = s.docs.map(d => ({id: d.id, ...d.data()})); updateUI(); });
-        onSnapshot(collection(db, "branches"), (s) => { allBranches = s.docs.map(d => ({id: d.id, ...d.data()})); updateUI(); });
-        onSnapshot(collection(db, "subs"), (s) => { allSubs = s.docs.map(d => ({id: d.id, ...d.data()})); updateUI(); });
-        onSnapshot(query(collection(db, "notes"), orderBy("updatedAt", "desc")), (s) => { 
-            allNotes = s.docs.map(d => ({id: d.id, ...d.data()})); 
-            renderTable(); 
+        // ── Auth State Listener ───────────────────────────────
+        onAuthStateChanged(auth, (user) => {
+            document.getElementById('loading-overlay').style.opacity = '0';
+            setTimeout(() => document.getElementById('loading-overlay').style.display = 'none', 300);
+
+            if (user) {
+                currentUser = user;
+                document.getElementById('auth-screen').style.display  = 'none';
+                document.getElementById('app-screen').style.display   = 'block';
+
+                // Set user bar info
+                const email  = user.email || '';
+                const initials = (user.displayName || email).charAt(0).toUpperCase();
+                document.getElementById('user-email').textContent     = email;
+                document.getElementById('user-avatar').textContent    = initials;
+
+                loadUserData(user.uid);
+            } else {
+                currentUser = null;
+                // Detach all Firestore listeners
+                unsubscribers.forEach(u => u());
+                unsubscribers = [];
+                allProjs = []; allBranches = []; allSubs = []; allNotes = [];
+
+                document.getElementById('auth-screen').style.display  = 'flex';
+                document.getElementById('app-screen').style.display   = 'none';
+            }
         });
 
-        window.addItem = async (type) => {
-            if(type === 'projects') {
-                const name = document.getElementById('newProj').value;
-                if(!name) return;
-                const pDoc = await addDoc(collection(db, "projects"), { name });
-                await addDoc(collection(db, "branches"), { name: "General", parentId: pDoc.id });
-                document.getElementById('newProj').value = '';
-            } else if(type === 'branches') {
-                const name = document.getElementById('newBranch').value;
-                const pName = document.getElementById('parentProj').value;
-                const parentId = allProjs.find(p => p.name === pName)?.id;
-                if(!name || !parentId) return;
-                const bDoc = await addDoc(collection(db, "branches"), { name, parentId });
-                await addDoc(collection(db, "subs"), { name: "General", parentId: bDoc.id });
-                document.getElementById('newBranch').value = '';
-            } else if(type === 'subs') {
-                const name = document.getElementById('newSub').value;
-                const isGlobal = document.getElementById('applyAll').checked;
-                const pName = document.getElementById('parentBranchProj').value;
-                const projectId = allProjs.find(p => p.name === pName)?.id;
-                
-                if(!name || !projectId) return;
+        // ── Per-user collection helper ────────────────────────
+        function userCol(colName) {
+            return collection(db, "users", currentUser.uid, colName);
+        }
+        function userDoc(colName, id) {
+            return doc(db, "users", currentUser.uid, colName, id);
+        }
 
-                if(isGlobal) {
-                    await addDoc(collection(db, "subs"), { name, parentId: "GLOBAL", projectId: projectId, isGlobal: true });
+        // ── Load all user data ────────────────────────────────
+        function loadUserData(uid) {
+            unsubscribers.forEach(u => u());
+            unsubscribers = [];
+
+            const snap = (colName, setter) => {
+                const unsub = onSnapshot(collection(db, "users", uid, colName), (s) => {
+                    setter(s.docs.map(d => ({ id: d.id, ...d.data() })));
+                    updateUI();
+                });
+                unsubscribers.push(unsub);
+            };
+
+            snap("projects", v => allProjs    = v);
+            snap("branches", v => allBranches = v);
+            snap("subs",     v => allSubs     = v);
+
+            const notesUnsub = onSnapshot(
+                query(collection(db, "users", uid, "notes"), orderBy("updatedAt", "desc")),
+                (s) => { allNotes = s.docs.map(d => ({ id: d.id, ...d.data() })); renderTable(); }
+            );
+            unsubscribers.push(notesUnsub);
+        }
+
+        // ── AUTH ACTIONS ──────────────────────────────────────
+        function showAuthError(msg) {
+            const el = document.getElementById('auth-error');
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+        function clearAuthError() {
+            document.getElementById('auth-error').style.display = 'none';
+        }
+
+        window.loginEmail = async () => {
+            clearAuthError();
+            const email = document.getElementById('login-email').value.trim();
+            const pass  = document.getElementById('login-pass').value;
+            if (!email || !pass) { showAuthError("Please enter email and password."); return; }
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch(e) {
+                const msgs = {
+                    'auth/user-not-found':  'No account found with this email.',
+                    'auth/wrong-password':  'Incorrect password. Please try again.',
+                    'auth/invalid-email':   'Please enter a valid email address.',
+                    'auth/too-many-requests': 'Too many attempts. Please try again later.'
+                };
+                showAuthError(msgs[e.code] || e.message);
+            }
+        };
+
+        window.registerEmail = async () => {
+            clearAuthError();
+            const email = document.getElementById('login-email').value.trim();
+            const pass  = document.getElementById('login-pass').value;
+            if (!email || !pass) { showAuthError("Please enter email and password."); return; }
+            if (pass.length < 6) { showAuthError("Password must be at least 6 characters."); return; }
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+            } catch(e) {
+                const msgs = {
+                    'auth/email-already-in-use': 'This email is already registered. Try signing in.',
+                    'auth/invalid-email':        'Please enter a valid email address.',
+                    'auth/weak-password':        'Password is too weak. Use at least 6 characters.'
+                };
+                showAuthError(msgs[e.code] || e.message);
+            }
+        };
+
+        window.loginGoogle = async () => {
+            clearAuthError();
+            try {
+                await signInWithPopup(auth, googleProvider);
+            } catch(e) {
+                if (e.code !== 'auth/popup-closed-by-user') {
+                    showAuthError("Google sign-in failed. Please try again.");
+                }
+            }
+        };
+
+        window.logout = async () => {
+            await signOut(auth);
+        };
+
+        window.showRegisterMode = () => {
+            clearAuthError();
+            document.getElementById('btn-login').style.display    = 'none';
+            document.getElementById('btn-register').style.display = 'block';
+            document.getElementById('auth-toggle-login').style.display    = 'none';
+            document.getElementById('auth-toggle-register').style.display = 'block';
+            document.getElementById('auth-subtitle').textContent = 'Create your workspace';
+        };
+
+        window.showLoginMode = () => {
+            clearAuthError();
+            document.getElementById('btn-login').style.display    = 'block';
+            document.getElementById('btn-register').style.display = 'none';
+            document.getElementById('auth-toggle-login').style.display    = 'block';
+            document.getElementById('auth-toggle-register').style.display = 'none';
+            document.getElementById('auth-subtitle').textContent = 'Sign in to your workspace';
+        };
+
+        // ── DATA ACTIONS ──────────────────────────────────────
+        window.addItem = async (type) => {
+            if (!currentUser) return;
+
+            if (type === 'projects') {
+                const name = document.getElementById('newProj').value.trim();
+                if (!name) return;
+                const pDoc = await addDoc(userCol("projects"), { name });
+                await addDoc(userCol("branches"), { name: "General", parentId: pDoc.id });
+                document.getElementById('newProj').value = '';
+
+            } else if (type === 'branches') {
+                const name   = document.getElementById('newBranch').value.trim();
+                const pName  = document.getElementById('parentProj').value;
+                const parentId = allProjs.find(p => p.name === pName)?.id;
+                if (!name || !parentId) return;
+                const bDoc = await addDoc(userCol("branches"), { name, parentId });
+                await addDoc(userCol("subs"), { name: "General", parentId: bDoc.id });
+                document.getElementById('newBranch').value = '';
+
+            } else if (type === 'subs') {
+                const name     = document.getElementById('newSub').value.trim();
+                const isGlobal = document.getElementById('applyAll').checked;
+                const pName    = document.getElementById('parentBranchProj').value;
+                const projectId = allProjs.find(p => p.name === pName)?.id;
+                if (!name || !projectId) return;
+
+                if (isGlobal) {
+                    await addDoc(userCol("subs"), { name, parentId: "GLOBAL", projectId, isGlobal: true });
                 } else {
-                    const bName = document.getElementById('parentBranch').value;
+                    const bName   = document.getElementById('parentBranch').value;
                     const parentId = allBranches.find(b => b.name === bName)?.id;
-                    if(!parentId) return;
-                    await addDoc(collection(db, "subs"), { name, parentId });
+                    if (!parentId) return;
+                    await addDoc(userCol("subs"), { name, parentId });
                 }
                 document.getElementById('newSub').value = '';
                 document.getElementById('applyAll').checked = false;
             }
         };
 
-        window.deleteItem = async (t, id) => { if(confirm("Delete item?")) await deleteDoc(doc(db, t, id)); };
-        window.editItem = async (t, id, old) => { 
-            const n = prompt("Edit name:", old); 
-            if(n) await updateDoc(doc(db, t, id), { name: n });
+        window.deleteItem = async (t, id) => {
+            if (!currentUser) return;
+            if (confirm("Delete item?")) await deleteDoc(userDoc(t, id));
+        };
+
+        window.editItem = async (t, id, old) => {
+            if (!currentUser) return;
+            const n = prompt("Edit name:", old);
+            if (n) await updateDoc(userDoc(t, id), { name: n });
         };
 
         window.saveNote = async () => {
-            const text = document.getElementById('noteInput').value;
-            if(!text) return;
+            if (!currentUser) return;
+            const text = document.getElementById('noteInput').value.trim();
+            if (!text) return;
             const now = serverTimestamp();
-            await addDoc(collection(db, "notes"), {
+            await addDoc(userCol("notes"), {
                 text,
-                project: document.getElementById('noteProj').value,
-                branch: document.getElementById('noteBranch').value,
+                project:   document.getElementById('noteProj').value,
+                branch:    document.getElementById('noteBranch').value,
                 subBranch: document.getElementById('noteSubBranch').value,
                 createdAt: now,
                 updatedAt: now
@@ -214,13 +630,17 @@
             document.getElementById('noteInput').value = '';
         };
 
-        window.deleteNote = async (id) => { if(confirm("Delete note?")) await deleteDoc(doc(db, "notes", id)); };
+        window.deleteNote = async (id) => {
+            if (!currentUser) return;
+            if (confirm("Delete note?")) await deleteDoc(userDoc("notes", id));
+        };
 
+        // ── UI HELPERS ────────────────────────────────────────
         function updateUI() {
-            fillDrop('noteProj', allProjs);
-            fillDrop('parentProj', allProjs);
+            fillDrop('noteProj',       allProjs);
+            fillDrop('parentProj',     allProjs);
             fillDrop('parentBranchProj', allProjs);
-            fillDrop('filterProj', allProjs, true);
+            fillDrop('filterProj',     allProjs, true);
             syncBranches('note');
             syncBranches('filter');
             updateBranchDrop('parentBranch');
@@ -231,7 +651,7 @@
 
         window.syncBranches = (prefix) => {
             const pName = document.getElementById(prefix + 'Proj').value;
-            const pId = allProjs.find(p => p.name === pName)?.id;
+            const pId   = allProjs.find(p => p.name === pName)?.id;
             const filtered = allBranches.filter(b => b.parentId === pId);
             fillDrop(prefix + 'Branch', filtered, prefix === 'filter');
             syncSubBranches(prefix);
@@ -239,57 +659,52 @@
 
         window.syncSubBranches = (prefix) => {
             const bName = document.getElementById(prefix + 'Branch').value;
-            const bId = allBranches.find(b => b.name === bName)?.id;
+            const bId   = allBranches.find(b => b.name === bName)?.id;
             const pName = document.getElementById(prefix + 'Proj').value;
-            const pId = allProjs.find(p => p.name === pName)?.id;
-
+            const pId   = allProjs.find(p => p.name === pName)?.id;
             const specific = allSubs.filter(s => s.parentId === bId);
-            const globals = allSubs.filter(s => s.parentId === "GLOBAL" && s.projectId === pId);
-            
+            const globals  = allSubs.filter(s => s.parentId === "GLOBAL" && s.projectId === pId);
             fillDrop(prefix + 'SubBranch', [...specific, ...globals], prefix === 'filter');
         };
 
         window.updateBranchDrop = (targetId) => {
             const pName = document.getElementById('parentBranchProj').value;
-            const pId = allProjs.find(p => p.name === pName)?.id;
-            const filtered = allBranches.filter(b => b.parentId === pId);
-            fillDrop(targetId, filtered);
+            const pId   = allProjs.find(p => p.name === pName)?.id;
+            fillDrop(targetId, allBranches.filter(b => b.parentId === pId));
         };
 
         window.renderBranchListOnly = () => {
             const pName = document.getElementById('parentProj').value;
-            const pId = allProjs.find(p => p.name === pName)?.id;
+            const pId   = allProjs.find(p => p.name === pName)?.id;
             renderList('branchList', allBranches.filter(b => b.parentId === pId), 'branches');
         };
 
         window.renderSubListOnly = () => {
             const bName = document.getElementById('parentBranch').value;
-            const bId = allBranches.find(b => b.name === bName)?.id;
+            const bId   = allBranches.find(b => b.name === bName)?.id;
             const pName = document.getElementById('parentBranchProj').value;
-            const pId = allProjs.find(p => p.name === pName)?.id;
-
+            const pId   = allProjs.find(p => p.name === pName)?.id;
             const specific = allSubs.filter(s => s.parentId === bId);
-            const globals = allSubs.filter(s => s.parentId === "GLOBAL" && s.projectId === pId);
-            
+            const globals  = allSubs.filter(s => s.parentId === "GLOBAL" && s.projectId === pId);
             renderList('subList', [...specific, ...globals], 'subs');
         };
 
         function fillDrop(id, list, allOpt = false) {
             const el = document.getElementById(id);
-            if(!el) return;
+            if (!el) return;
             const unique = [];
-            const seen = new Set();
+            const seen   = new Set();
             list.forEach(item => {
-                if(!seen.has(item.name)) {
-                    unique.push(item);
-                    seen.add(item.name);
-                }
+                if (!seen.has(item.name)) { unique.push(item); seen.add(item.name); }
             });
-            el.innerHTML = (allOpt ? '<option value="">All</option>' : '') + unique.map(i => `<option value="${i.name}">${i.name}</option>`).join('');
+            el.innerHTML = (allOpt ? '<option value="">All</option>' : '') +
+                unique.map(i => `<option value="${i.name}">${i.name}</option>`).join('');
         }
 
         function renderList(id, list, type) {
-            document.getElementById(id).innerHTML = list.map(i => `
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.innerHTML = list.map(i => `
                 <div class="flex justify-between items-center p-3 ${i.isGlobal ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200' : 'bg-gray-100 dark:bg-gray-700'} rounded-lg text-sm border dark:border-gray-600 shadow-sm">
                     <span class="truncate pr-2 font-medium">${i.isGlobal ? '[G] ' : ''}${i.name}</span>
                     <div class="flex space-x-4 flex-shrink-0">
@@ -300,17 +715,23 @@
         }
 
         function formatTS(ts) {
-            if(!ts) return "N/A";
+            if (!ts) return "N/A";
             const d = ts.toDate ? ts.toDate() : new Date(ts);
-            return d.toLocaleString([], {dateStyle: 'short', timeStyle: 'short'});
+            return d.toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
         }
 
         window.renderTable = () => {
-            const fP = document.getElementById('filterProj').value;
-            const fB = document.getElementById('filterBranch').value;
-            const fS = document.getElementById('filterSubBranch').value;
-            const filtered = allNotes.filter(n => (!fP || n.project === fP) && (!fB || n.branch === fB) && (!fS || n.subBranch === fS));
-            document.getElementById('notesTableBody').innerHTML = filtered.map(n => `
+            const fP = document.getElementById('filterProj')?.value;
+            const fB = document.getElementById('filterBranch')?.value;
+            const fS = document.getElementById('filterSubBranch')?.value;
+            const filtered = allNotes.filter(n =>
+                (!fP || n.project === fP) &&
+                (!fB || n.branch === fB) &&
+                (!fS || n.subBranch === fS)
+            );
+            const tbody = document.getElementById('notesTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = filtered.map(n => `
                 <tr class="align-top hover:bg-gray-50 dark:hover:bg-gray-800/50">
                     <td class="p-4 border-r dark:border-gray-700">
                         <div class="font-bold text-blue-600 text-[10px]">${n.project}</div>
@@ -324,19 +745,30 @@
 
         window.exportToHTML = () => {
             const fP = document.getElementById('filterProj').value || "All Projects";
-            const filtered = allNotes.filter(n => 
-                (!document.getElementById('filterProj').value || n.project === document.getElementById('filterProj').value) && 
-                (!document.getElementById('filterBranch').value || n.branch === document.getElementById('filterBranch').value) && 
-                (!document.getElementById('filterSubBranch').value || n.subBranch === document.getElementById('filterSubBranch').value)
+            const fB = document.getElementById('filterBranch').value;
+            const fS = document.getElementById('filterSubBranch').value;
+            const filtered = allNotes.filter(n =>
+                (!document.getElementById('filterProj').value  || n.project   === document.getElementById('filterProj').value) &&
+                (!fB || n.branch    === fB) &&
+                (!fS || n.subBranch === fS)
             );
-
-            let rows = filtered.map(n => `<tr><td>${n.project} > ${n.branch} > ${n.subBranch}</td><td>${n.text}</td><td>${formatTS(n.updatedAt || n.createdAt)}</td></tr>`).join('');
+            const rows = filtered.map(n =>
+                `<tr><td>${n.project} > ${n.branch} > ${n.subBranch}</td><td>${n.text}</td><td>${formatTS(n.updatedAt || n.createdAt)}</td></tr>`
+            ).join('');
             const htmlContent = `<!DOCTYPE html><html><head><style>body{font-family:sans-serif;padding:20px;}.guideline{background:#fff3cd;padding:15px;border:1px solid #ffeeba;margin-bottom:20px;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ddd;padding:10px;text-align:left;vertical-align:top;}th{background:#f8f9fa;}</style></head><body><div class="guideline"><strong>AI Guideline:</strong> In case of logic conflicts, use the most recent timestamp.</div><h2>Project Report: ${fP}</h2><table><thead><tr><th>Context</th><th>Requirement</th><th>Last Update</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
             const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement('a');
             a.href = url; a.download = `AI_Analysis_Report.html`; a.click();
         };
+
+        // Allow pressing Enter to submit login
+        document.getElementById('login-pass').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const isRegister = document.getElementById('btn-register').style.display !== 'none';
+                isRegister ? registerEmail() : loginEmail();
+            }
+        });
     </script>
 
     <script>
@@ -350,10 +782,13 @@
             const btn = document.getElementById('btn-' + id);
             btn.classList.add('bg-white', 'shadow-sm', 'dark:bg-gray-700', 'text-blue-600', 'dark:text-blue-400');
         }
+
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
-            document.getElementById('dark-icon').innerText = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
+            document.getElementById('dark-icon').innerText =
+                document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
         }
     </script>
+
 </body>
 </html>
